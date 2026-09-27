@@ -2,6 +2,7 @@ import userModel from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import config from '../config/config.js'
+import blockTokenModel from '../models/blackList.model.js';
 
 export const register = async (req ,res) =>{
     try{
@@ -80,4 +81,53 @@ export const login = async (req , res)=>{
             email : user.email
         }
     });
+}
+
+export const logout = async (req,res)=>{
+    const token = req.cookies.token;
+
+    if(!token) {
+        return res.status(401).json({
+            message:"Invalid Request"
+        });
+    }else{
+        await blockTokenModel.create({ token });
+    }
+
+    res.clearCookie('token');
+
+    res.status(200).json({
+        message: "User logged out successfully"
+    })
+}
+
+
+export const getMe = async (req , res)=>{
+    
+    const token = req.cookies.token;
+
+    if(!token){
+        return res.status(401).json({
+            message:"Token not found"
+        });
+    }
+    const isTokenBlocked = await blockTokenModel.findOne({token});
+
+    if(isTokenBlocked){
+        return res.status(401).json({
+            message : "Invalid Token"
+        })
+    }
+
+
+    const user = await userModel.findById(req.user.id);
+
+    res.status(200).json({
+        message: "User details fetched successfully",
+        user:{
+            id: user.id,
+            username : user.username,
+            email : user.email
+        }
+    })
 }
