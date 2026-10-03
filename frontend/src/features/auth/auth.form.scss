@@ -6,3 +6,48 @@ main{
     justify-content: center;
     align-items: center;
 }
+
+.form-container{
+    min-width: 650px;
+    min-height: 450px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap:1.5rem;
+    border: 1px solid rgba(87, 87, 87, 0.507);
+    border-radius: 30px;
+    padding: 8rem;
+    background: #2f2f30;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap:1.85rem;
+
+}
+h1{
+    position: relative;
+    bottom: 20px;
+    right: 80px;
+    font-size:50px;
+}
+.input-grp{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 20px;
+}
+
+
+input{
+    border: none;
+    outline: none;
+    padding-inline: 1rem;
+    padding-block: 0.75rem;
+    border-radius: 1.5rem;
+}
+.navigate{
+    color: #0080bb;
+    text-decoration: none;
+    font-size: 20px;
+}
