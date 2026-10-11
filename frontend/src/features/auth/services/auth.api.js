@@ -19,26 +19,21 @@ export const register = async ({username , email , password})=>{
     }
 }
 
-export const login = async ({email , password})=>{
-    try{
-
-        const response = await api.get('/api/auth/login', {
-            email , password
-        });
-
+export const login = async ({ email, password }) => {
+    try {
+        const response = await api.post('/api/auth/login', { email, password });
         return response.data;
-    }catch(error){
-        console.log(error);
+    } catch (error) {
+        throw new Error(error.response?.data?.message || error.message, { cause: error });
     }
 }
 
-export const logout = async ()=>{
-    try{
-        const response = await api.get('/api/auth/login');
-
+export const logout = async () => {
+    try {
+        const response = await api.post('/api/auth/logout');
         return response.data;
-    }catch(error){
-        console.log(error);
+    } catch (error) {
+        throw new Error(error.response?.data?.message || error.message, { cause: error });
     }
 }
 
