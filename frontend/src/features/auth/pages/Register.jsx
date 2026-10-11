@@ -1,26 +1,25 @@
 import { useState } from "react";
 import "../auth.form.scss"
-import { Link , useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 
 const Register = () => {
 
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [email , setEmail] = useState("");
-  const [password , setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const{loading , handleRegister} = useAuth();
+  const { loading, handleRegister } = useAuth();
 
-
-  const handleSubmit = (e) =>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    e.handleRegister({username , email, password});
-    navigate('/');
+    const ok = await handleRegister({ username, email, password });
+    if (ok) navigate('/');
   }
 
-  if(loading){
-    return(<main><h1>Loading...</h1></main>)
+  if (loading) {
+    return (<main><h1>Loading...</h1></main>)
   }
 
   return (
@@ -31,25 +30,23 @@ const Register = () => {
         <form onSubmit={handleSubmit}>
           <div className="input-grp">
             <label htmlFor="username">Username</label>
-            <input onChange={
-              (e) => {setUsername(e.target.value)}
-            } type="text" id="username" name="username" placeholder="Enter your username"/>
+            <input onChange={(e) => { setUsername(e.target.value) }} type="text" id="username" name="username" placeholder="Enter your username" required />
           </div>
 
           <div className="input-grp">
             <label htmlFor="email">Email</label>
-            <input onChange={(e)=> {setEmail(e.target.value)}} type="email" name="email" id="email" placeholder="Enter your email" />
+            <input onChange={(e) => { setEmail(e.target.value) }} type="email" name="email" id="email" placeholder="Enter your email" required />
           </div>
 
           <div className="input-grp">
             <label htmlFor="password">Password</label>
-            <input onChange= {(e)=> {setPassword(e.target.value)}} type="password" name="password" id="password" placeholder="Enter password"/>
+            <input onChange={(e) => { setPassword(e.target.value) }} type="password" name="password" id="password" placeholder="Enter password" required />
           </div>
 
           <button className="button primary-button" type="submit">Register</button>
         </form>
 
-        <p>Already have an account ? <Link to ={"/login"} className="navigate">Login</Link> </p>
+        <p>Already have an account ? <Link to={"/login"} className="navigate">Login</Link> </p>
       </div>
     </main>
   )
