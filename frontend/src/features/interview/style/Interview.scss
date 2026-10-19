@@ -1,0 +1,461 @@
+$bg-dark: #0b0d12;
+$panel-bg: #131720;
+$card-bg: #181d28;
+$border-subtle: rgba(255, 255, 255, 0.08);
+$primary-accent: #4babeb;
+$text-main: #f3f4f6;
+$text-muted: #9ca3af;
+
+.interview-dashboard {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $bg-dark;
+  color: $text-main;
+  display: grid;
+  grid-template-columns: 260px 1fr 310px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: 240px 1fr;
+
+    .interview-insights {
+      grid-column: 1 / -1;
+      flex-direction: row;
+    }
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+
+  .interview-nav {
+    background: $panel-bg;
+    border-right: 1px solid $border-subtle;
+    padding: 1.5rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .nav-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .back-btn {
+      align-self: flex-start;
+      background: transparent;
+      border: 1px solid $border-subtle;
+      color: $text-muted;
+      padding: 0.45rem 0.85rem;
+      border-radius: 0.5rem;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: $text-main;
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    .role-box {
+      padding: 0.9rem;
+      background: $card-bg;
+      border: 1px solid $border-subtle;
+      border-radius: 0.75rem;
+
+      .role-tag {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #79e4ff;
+        font-weight: 700;
+      }
+
+      h2 {
+        font-size: 0.98rem;
+        margin-top: 0.3rem;
+        line-height: 1.35;
+      }
+    }
+
+    .tab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+
+      .tab-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.75rem 0.9rem;
+        border-radius: 0.65rem;
+        background: transparent;
+        border: 1px solid transparent;
+        color: $text-muted;
+        font-size: 0.88rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.18s ease;
+
+        .count {
+          font-size: 0.74rem;
+          padding: 0.15rem 0.45rem;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.06);
+        }
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.04);
+          color: $text-main;
+        }
+
+        &.active {
+          background: rgba(235, 77, 75, 0.12);
+          border-color: rgba(75, 131, 235, 0.35);
+          color: #ffffff;
+          font-weight: 600;
+
+          .count {
+            background: $primary-accent;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+
+
+  .interview-main {
+    padding: 2rem 2.25rem;
+    overflow-y: auto;
+    max-height: 100vh;
+
+    .section-header {
+      margin-bottom: 1.75rem;
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+      }
+
+      p {
+        color: $text-muted;
+        font-size: 0.9rem;
+      }
+    }
+
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .q-card {
+      background: $panel-bg;
+      border: 1px solid $border-subtle;
+      border-radius: 0.85rem;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+
+      &.open {
+        border-color: rgba(235, 77, 75, 0.35);
+      }
+
+      .q-header {
+        width: 100%;
+        background: transparent;
+        border: none;
+        padding: 1.15rem 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        text-align: left;
+        color: $text-main;
+        cursor: pointer;
+
+        .q-title-wrap {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.85rem;
+
+          .q-index {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.4rem;
+            background: rgba(235, 77, 75, 0.14);
+            color: #79ceff;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+          }
+
+          h3 {
+            font-size: 0.98rem;
+            font-weight: 600;
+            line-height: 1.45;
+          }
+        }
+
+        .chevron {
+          font-size: 1.25rem;
+          color: $text-muted;
+        }
+      }
+
+      .q-body {
+        padding: 0 1.25rem 1.25rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        border-top: 1px solid $border-subtle;
+        padding-top: 1rem;
+
+        .info-block {
+          padding: 0.85rem 1rem;
+          border-radius: 0.65rem;
+          background: $card-bg;
+
+          .block-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.35rem;
+          }
+
+          p {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: #d1d5db;
+          }
+
+          &.intention {
+            border-left: 3px solid #60a5fa;
+            .block-label {
+              color: #60a5fa;
+            }
+          }
+
+          &.answer {
+            border-left: 3px solid #34d399;
+            .block-label {
+              color: #34d399;
+            }
+          }
+        }
+      }
+    }
+
+    .roadmap-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+
+      .timeline-card {
+        display: flex;
+        gap: 1.25rem;
+        background: $panel-bg;
+        border: 1px solid $border-subtle;
+        border-radius: 0.85rem;
+        padding: 1.25rem;
+
+        .day-badge {
+          height: fit-content;
+          padding: 0.35rem 0.75rem;
+          border-radius: 0.5rem;
+          background: rgba(235, 77, 75, 0.15);
+          color: #ff7979;
+          font-weight: 700;
+          font-size: 0.82rem;
+          white-space: nowrap;
+        }
+
+        .day-details {
+          h3 {
+            font-size: 1.02rem;
+            margin-bottom: 0.6rem;
+          }
+
+          ul {
+            padding-left: 1.15rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+
+            li {
+              font-size: 0.88rem;
+              color: #d1d5db;
+              line-height: 1.5;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .interview-insights {
+    background: $panel-bg;
+    border-left: 1px solid $border-subtle;
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    .insight-card {
+      background: $card-bg;
+      border: 1px solid $border-subtle;
+      border-radius: 0.9rem;
+      padding: 1.25rem;
+
+      .card-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: $text-muted;
+      }
+    }
+
+    .score-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.1rem;
+
+      .score-ring {
+        width: 136px;
+        height: 136px;
+        border-radius: 50%;
+        background: conic-gradient($primary-accent var(--score), rgba(255, 255, 255, 0.08) 0deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .score-inner {
+          width: 112px;
+          height: 112px;
+          border-radius: 50%;
+          background: $card-bg;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          .score-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: $text-main;
+          }
+
+          .score-status {
+            font-size: 0.72rem;
+            color: #34d399;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+
+    .gaps-card {
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.35rem;
+
+        .gap-count {
+          font-size: 0.72rem;
+          color: #79afff;
+          font-weight: 600;
+        }
+      }
+
+      .card-sub {
+        font-size: 0.8rem;
+        color: $text-muted;
+        margin-bottom: 1rem;
+      }
+
+      .skill-tags {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+
+        .skill-tag {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.5rem;
+          padding: 0.6rem 0.75rem;
+          border-radius: 0.55rem;
+          font-size: 0.82rem;
+          border: 1px solid transparent;
+
+          .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+          }
+
+          .skill-name {
+            flex: 1;
+            font-weight: 500;
+          }
+
+          .severity-badge {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.3rem;
+          }
+
+          &.severity-high {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.25);
+            .dot {
+              background: #44a2ef;
+            }
+            .severity-badge {
+              color: #71acf8;
+              background: rgba(239, 68, 68, 0.15);
+            }
+          }
+
+          &.severity-medium {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.25);
+            .dot {
+              background: #f59e0b;
+            }
+            .severity-badge {
+              color: #fbbf24;
+              background: rgba(245, 158, 11, 0.15);
+            }
+          }
+
+          &.severity-low {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.25);
+            .dot {
+              background: #10b981;
+            }
+            .severity-badge {
+              color: #34d399;
+              background: rgba(16, 185, 129, 0.15);
+            }
+          }
+        }
+      }
+    }
+  }
+}
