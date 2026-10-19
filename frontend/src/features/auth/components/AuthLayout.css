@@ -1,0 +1,45 @@
+.auth-layout {
+  position: relative;
+  min-height: 100vh;
+  background: #0b0d12;
+  overflow: hidden;
+}
+
+.auth-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.auth-content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+
+.auth-content > * {
+  width: 100%;
+}
+
+
+.auth-content > main {
+  min-height: auto;
+  padding: 0;
+  background: transparent;
+}
+
+
+.auth-content .form-container {
+  width: 100%;
+  max-width: 840px;
+  min-width: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
