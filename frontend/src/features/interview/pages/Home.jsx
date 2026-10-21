@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import "../style/home.scss";
 import AuthLayout from '../../../features/auth/components/AuthLayout';
+import { useInterview } from '../hooks/useInterview'; // adjust path to your folder structure
 
 const Home = () => {
   const navigate = useNavigate();
@@ -11,6 +12,9 @@ const Home = () => {
   const [selfDescription, setSelfDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
 
+  // Logic from the custom hook
+  const { loading, generateReport, reports } = useInterview();
+
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (file && file.type === "application/pdf") {
@@ -18,11 +22,29 @@ const Home = () => {
     }
   };
 
-  const handleGenerateReport = (e) => {
-    e.preventDefault();
+  const handleGenerateReport = async (e) => {
+    e?.preventDefault();
 
-    navigate("/interview/demo-report-id");
+    // Grab the file from the hidden input
+    const resumeFile = resumeInputRef.current?.files?.[0];
+
+    // Call the API through the hook
+    const data = await generateReport({ jobDescription, selfDescription, resumeFile });
+
+    // Navigate to the newly created report
+    if (data && data._id) {
+      navigate(`/interview/${data._id}`);
+    }
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <main className="home-page">
+        <h1>Loading your interview plan...</h1>
+      </main>
+    );
+  }
 
   return (
     <main className="home-page">
@@ -154,6 +176,26 @@ const Home = () => {
             </div>
           </div>
         </section>
+
+        {/* Recent Reports (from the YT code's logic) */}
+        {reports && reports.length > 0 && (
+          <section className="recent-reports">
+            <h3>Recent Reports</h3>
+            <div className="report-list">
+              {reports.map((report) => (
+                <div
+                  key={report._id}
+                  className="report-item"
+                  onClick={() => navigate(`/interview/${report._id}`)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <p>{report.title}</p>
+                  <p className="match-score">Match Score: {report.matchScore}%</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         <footer className="page-footer">
           <span>Structured JSON Output • Powered by Google Gemini 2.5 Flash</span>
