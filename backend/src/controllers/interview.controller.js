@@ -4,7 +4,7 @@ const pdfparse = require('pdf-parse');
 import generateInterviewReport from '../services/ai.service.js';
 import interviewReportModel from '../models/interviewReport.model.js';
 
-// Converts array of strings OR objects to correct question object shape
+
 const toQuestionObjects = (arr) => {
     if (!Array.isArray(arr)) return [];
     return arr
@@ -17,7 +17,7 @@ const toQuestionObjects = (arr) => {
         .filter(item => item && item.question);
 };
 
-// Converts array of strings OR objects to correct skill gap shape
+
 const toSkillGapObjects = (arr) => {
     if (!Array.isArray(arr)) return [];
     return arr
@@ -30,7 +30,7 @@ const toSkillGapObjects = (arr) => {
         .filter(item => item && item.skill);
 };
 
-// Converts array of strings OR objects to correct preparation plan shape
+
 const toPlanObjects = (arr) => {
     if (!Array.isArray(arr)) return [];
     return arr
@@ -60,7 +60,7 @@ export const generateInterviewReportController = async (req, res) => {
             jobDescription
         });
 
-        // Log what AI returned so we can debug
+        
         console.log("AI behavioralQuestions:", JSON.stringify(interviewReportByAI?.behavioralQuestions, null, 2));
         console.log("AI skillGaps:", JSON.stringify(interviewReportByAI?.skillGaps, null, 2));
 
@@ -77,7 +77,7 @@ export const generateInterviewReportController = async (req, res) => {
             user: req.user?.id
         });
 
-        // Log what is being saved
+        
         console.log("SAVING behavioralQuestions:", interviewReport.behavioralQuestions?.length);
         console.log("SAVING skillGaps:", interviewReport.skillGaps?.length);
 
