@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import "../style/home.scss";
 import AuthLayout from '../../../features/auth/components/AuthLayout';
-import { useInterview } from '../hooks/useInterview'; // adjust path to your folder structure
+import { generateInterviewReport } from "../services/interview.api";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -11,9 +11,9 @@ const Home = () => {
   const [jobDescription, setJobDescription] = useState("");
   const [selfDescription, setSelfDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-
-  // Logic from the custom hook
-  const { loading, generateReport, reports } = useInterview();
+  
+  // 1. Added isLoading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -22,29 +22,40 @@ const Home = () => {
     }
   };
 
-  const handleGenerateReport = async (e) => {
-    e?.preventDefault();
+  // 2. Updated handleGenerateReport with validation, loading state, and error handling
+  const handleGenerateReport = async () => {
+    const resumeFile = resumeInputRef.current?.files[0];
 
-    // Grab the file from the hidden input
-    const resumeFile = resumeInputRef.current?.files?.[0];
+    if (!jobDescription) {
+      alert("Please enter a job description.");
+      return;
+    }
 
-    // Call the API through the hook
-    const data = await generateReport({ jobDescription, selfDescription, resumeFile });
+    if (!resumeFile) {
+      alert("Please upload your resume in PDF format.");
+      return;
+    }
 
-    // Navigate to the newly created report
-    if (data && data._id) {
-      navigate(`/interview/${data._id}`);
+    setIsLoading(true);
+    try {
+      const data = await generateInterviewReport({ jobDescription, selfDescription, resumeFile });
+      console.log("RETURNED DATA:", data);
+
+      // Handle both nested and flat response structures just to be safe
+      const reportId = data?.interviewReport?._id || data?._id;
+
+      if (reportId) {
+        navigate(`/interview/${reportId}`);
+      } else {
+        alert("Report generated, but could not find the report ID.");
+      }
+    } catch (error) {
+      console.error("Failed to generate report:", error);
+      alert("Failed to generate report. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  // Loading state
-  if (loading) {
-    return (
-      <main className="home-page">
-        <h1>Loading your interview plan...</h1>
-      </main>
-    );
-  }
 
   return (
     <main className="home-page">
@@ -62,7 +73,6 @@ const Home = () => {
             gaps, predicts high-probability questions, and builds a tailored day-by-day prep roadmap.
           </p>
         </header>
-
 
         <section className="interview-card">
           <div className="interview-input-group">
@@ -82,14 +92,13 @@ const Home = () => {
                 <textarea
                   id="jobDescription"
                   name="jobDescription"
-                  placeholder="e.g. Position: Senior Backend Engineer (Node.js)&#10;Responsibilities:&#10;- Design scalable microservices and REST APIs...&#10;- Optimize MongoDB aggregations and Redis caching..."
+                  placeholder="e.g. Position: Senior Backend Engineer (Node.js)&#10;Responsibilities:&#10;Design scalable microservices and REST APIs...&#10;Optimize MongoDB aggregations and Redis caching..."
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                 />
                 <span className="char-count">{jobDescription.length} chars</span>
               </div>
             </div>
-
 
             <div className="panel right-panel">
               <div className="input-group">
@@ -131,13 +140,12 @@ const Home = () => {
                     ) : (
                       <div className="file-info">
                         <span className="upload-cta">Click to upload your Resume</span>
-                        <span className="file-meta">PDF format only (Max 3MB)</span>
+                        <span className="file-meta">PDF format only (Max 5MB)</span>
                       </div>
                     )}
                   </div>
                 </label>
               </div>
-
 
               <div className="input-group expand-group">
                 <div className="panel-header">
@@ -158,11 +166,12 @@ const Home = () => {
                 </div>
               </div>
 
-
+              {/* 3. Updated Button with disabled state and dynamic text */}
               <button
                 type="button"
                 onClick={handleGenerateReport}
                 className="button primary-button generate-btn"
+                disabled={isLoading}
               >
                 <svg
                   className="sparkle-icon"
@@ -171,34 +180,14 @@ const Home = () => {
                 >
                   <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
                 </svg>
-                Generate My Interview Strategy
+                {isLoading ? "Generating..." : "Generate My Interview Strategy"}
               </button>
             </div>
           </div>
         </section>
 
-        {/* Recent Reports (from the YT code's logic) */}
-        {reports && reports.length > 0 && (
-          <section className="recent-reports">
-            <h3>Recent Reports</h3>
-            <div className="report-list">
-              {reports.map((report) => (
-                <div
-                  key={report._id}
-                  className="report-item"
-                  onClick={() => navigate(`/interview/${report._id}`)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <p>{report.title}</p>
-                  <p className="match-score">Match Score: {report.matchScore}%</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
         <footer className="page-footer">
-          <span>Structured JSON Output • Powered by Google Gemini 2.5 Flash</span>
+          <span>Structured JSON Output • Powered by Google Gemini 3.5 Flash Lite</span>
         </footer>
       </AuthLayout>
     </main>
