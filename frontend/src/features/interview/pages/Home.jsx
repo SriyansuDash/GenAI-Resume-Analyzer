@@ -1,8 +1,9 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
-import "../style/home.scss";
+import "../style/Home.scss";
 import AuthLayout from '../../../features/auth/components/AuthLayout';
 import { generateInterviewReport } from "../services/interview.api";
+import AppHeader from "../components/AppHeader";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Home = () => {
     }
   };
 
-  // 2. Updated handleGenerateReport with validation, loading state, and error handling
+  
   const handleGenerateReport = async () => {
     const resumeFile = resumeInputRef.current?.files[0];
 
@@ -41,7 +42,7 @@ const Home = () => {
       const data = await generateInterviewReport({ jobDescription, selfDescription, resumeFile });
       console.log("RETURNED DATA:", data);
 
-      // Handle both nested and flat response structures just to be safe
+      
       const reportId = data?.interviewReport?._id || data?._id;
 
       if (reportId) {
@@ -58,7 +59,9 @@ const Home = () => {
   };
 
   return (
-    <main className="home-page">
+    <div className="home-with-header">
+      <AppHeader />
+      <main className="home-page">
       <AuthLayout>
         <header className="page-header">
           <div className="badge">
@@ -166,7 +169,7 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* 3. Updated Button with disabled state and dynamic text */}
+              
               <button
                 type="button"
                 onClick={handleGenerateReport}
@@ -190,7 +193,8 @@ const Home = () => {
           <span>Structured JSON Output • Powered by Google Gemini 3.5 Flash Lite</span>
         </footer>
       </AuthLayout>
-    </main>
+      </main>
+    </div>
   );
 };
 
