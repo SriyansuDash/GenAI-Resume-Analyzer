@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import "./Reports.scss";
+import "../style/Reports.scss";
 import AuthLayout from "../../../features/auth/components/AuthLayout";
 import { useInterview } from "../hooks/useInterview";
 import AppHeader from "../components/AppHeader";
