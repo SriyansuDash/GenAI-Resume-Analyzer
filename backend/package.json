@@ -31,6 +31,7 @@
     "multer": "^2.4.0",
     "nodemon": "^3.1.14",
     "pdf-parse": "^2.4.5",
+    "pdf2json": "^4.1.0",
     "zod": "^4.6.7",
     "zod-to-json-schema": "^3.25.2"
   }
